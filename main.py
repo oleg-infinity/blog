@@ -1,13 +1,14 @@
-from flask import Flask, url_for, redirect
+from flask import Flask, render_template, url_for, redirect
 import settings as stg
+import db_scripts as db
 
 app = Flask(__name__, static_folder=stg.PATH_STATIC)
 app.config['SECRET_KEY'] = stg.SECRET_KEY
 
 @app.route("/")
+@app.route("/index")
 def index():
-    url = url_for("static", "templates/index.html")
-    return url
+    return render_template("index.html")
 
 
 @app.route("/post/category")
@@ -22,7 +23,9 @@ def post_view():
 
 @app.route("/about")
 def about():
-    return "ТУТ БУДЕ ІНФО ПРО АВТОРА"
+    user = db.getUser()
+    print(user)
+    return render_template("about.html", user=user)
 
 
 app.run(debug=True)
